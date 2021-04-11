@@ -41,7 +41,7 @@ def register_user():
     return render_template('register.html', form=form)
 
 @app.route('/users/<username>', methods=['GET'])
-def show_secret(username):
+def show_user_info(username):
     """Show the user's page."""
     user = User.query.get(username)
     if session.get('username'):
