@@ -1,7 +1,7 @@
 from flask import Flask, session, render_template, flash, redirect
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, User, connect_db
-from forms import RegisterForm
+from forms import RegisterForm, LoginForm
 
 app = Flask(__name__)
 
@@ -43,3 +43,9 @@ def register_user():
 def show_secret():
     """Show the secret page."""
     return render_template('secret.html')
+
+@app.route('/login')
+def login_user():
+    """Log a user in."""
+    form = LoginForm()
+    return render_template('login.html', form=form)
