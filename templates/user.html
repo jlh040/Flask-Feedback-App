@@ -6,8 +6,10 @@ User Page
 
 {% block content %}
 <h1 class="display-5">{{ user.first_name }}'s Page</h1>
+{% if session['username'] == user.username %}
 <p class="lead"><a href="">Add Feedback</a></p>
 <button class="btn btn-outline-danger">Delete User</button>
+{% endif %}
 <hr>
 <div class="row">
     <div class="col-6">
@@ -37,8 +39,10 @@ User Page
                 <p class="card-text">
                     Content: {{ feedback.content }}
                 </p>
+                {% if session['username'] == user.username %}
                 <a href="/edit" class="card-link">Edit Feedback</a>
                 <a href="/delete" class="card-link text-danger">Delete Feedback</a>
+                {% endif %}
             </div>
         </div>
         {% endfor %}
