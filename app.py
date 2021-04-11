@@ -1,7 +1,7 @@
 from flask import Flask, session, render_template, flash, redirect
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, User, connect_db
-from forms import RegisterForm, LoginForm
+from forms import RegisterForm, LoginForm, FeedbackForm
 
 app = Flask(__name__)
 
@@ -87,6 +87,12 @@ def delete_user(username):
     else:
         flash('Not authorized to delete this user!!')
         return redirect('/')
+
+@app.route('/users/<username>/feedback/add', methods=['GET'])
+def add_feedback(username):
+    form = FeedbackForm()
+    user = User.query.get(username)
+    return render_template('add_feedback.html', form=form, user=user)
 
 def delete_feedback_and_user(user):
     """Delete all of a user's feedback and then delete the user."""

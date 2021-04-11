@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Feedback Form
+{% endblock %}
+
+{% block content %}
+<h1 class="display-2">Add Feedback</h1>
+<form action="">
+    {{ form.hidden_tag() }}
+
+    {{ form.feedback.label(class_="form-label")}}
+    {{ form.feedback(class_="form-control") }}
+    <button class="btn btn-outline-success my-3">Add feedback</button>
+    <a href="/users/{{ user.username }}" class="btn btn-outline-info ms-2">Go back</a>
+</form>
+{% endblock %}
