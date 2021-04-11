@@ -32,7 +32,7 @@ def register_user():
         first_name = form.first_name.data
         last_name = form.last_name.data
 
-        user = User(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
+        user = User.register(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
         db.session.add(user)
         db.session.commit()
         return redirect('/secret')
