@@ -5,18 +5,43 @@ User Page
 {% endblock %}
 
 {% block content %}
-<h1 class="display-5">User Page</h1>
+<h1 class="display-5">{{ user.first_name }}'s Page</h1>
+<p class="lead"><a href="">Add Feedback</a></p>
+<button class="btn btn-outline-danger">Delete User</button>
 <hr>
-<div class="my-3 text-primary">
-    <div class="display-5 my-2">
-        Name: {{ user.first_name }}
-        {{ user.last_name }}
+<div class="row">
+    <div class="col-6">
+        <div class="my-3 text-primary">
+            <div class="display-5 my-2">
+                Name: {{ user.first_name }}
+                {{ user.last_name }}
+            </div>
+            <div class="display-5 mb-2">
+                Username: {{ user.username }}
+            </div>
+            <div class="display-5 my-2">
+                Email: {{ user.email }}
+            </div>
+        </div>
     </div>
-    <div class="display-5 mb-2">
-        Username: {{ user.username }}
-    </div>
-    <div class="display-5 my-2">
-        Email: {{ user.email }}
+    <div class="col-6">
+        {% for feedback in user.feedback %}
+        <div class="card my-2">
+            <div class="card-body">
+                <h5 class="card-title">
+                    Title: {{ feedback.title }}
+                </h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                    Username: {{ feedback.username }}
+                </h6>
+                <p class="card-text">
+                    Content: {{ feedback.content }}
+                </p>
+                <a href="/edit" class="card-link">Edit Feedback</a>
+                <a href="/delete" class="card-link text-danger">Delete Feedback</a>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}
