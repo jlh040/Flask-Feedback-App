@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 
+
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 
@@ -22,7 +23,7 @@ class User(db.Model):
 
     @classmethod
     def register(cls, username, password, email, first_name, last_name):
-        """Authenticate a user's credentials."""
+        """Hash a user's credentials and return the user."""
 
         hashed_password = bcrypt.generate_password_hash(password)
         hashed_utf8 = hashed_password.decode('utf8')
@@ -34,6 +35,17 @@ class User(db.Model):
             first_name = first_name, 
             last_name = last_name
             )
+    
+    @classmethod
+    def login(cls, username, password):
+        """Authenticate a user, return the user if authenticated, and false otherwise."""
+
+        user = cls.query.filter_by(username=username).first()
+
+        if user and bcrypt.check_password_hash(user.password, password):
+            return user
+        else:
+            return False
 
 
 

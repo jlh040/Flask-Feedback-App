@@ -44,8 +44,19 @@ def show_secret():
     """Show the secret page."""
     return render_template('secret.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login_user():
     """Log a user in."""
     form = LoginForm()
+
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+
+        if User.login(username, password):
+            return redirect('/secret')
+        else:
+            flash('Incorrect Credentials')
+            return redirect('/login')
+
     return render_template('login.html', form=form)
