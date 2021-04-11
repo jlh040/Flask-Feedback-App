@@ -74,3 +74,24 @@ def logout_user():
     session.clear()
     flash('See you soon!')
     return redirect('/')
+
+@app.route('/users/<username>/delete', methods=['POST'])
+def delete_user(username):
+    """Delete a user."""
+    if session['username'] == username:
+        user = User.query.get(username)
+        delete_feedback_and_user(user)
+        session.clear()
+        flash('Your account has been deleted!')
+        return redirect('/')
+    else:
+        flash('Not authorized to delete this user!!')
+        return redirect('/')
+
+def delete_feedback_and_user(user):
+    """Delete all of a user's feedback and then delete the user."""
+    for feedback in user.feedback:
+        db.session.delete(feedback)
+    
+    db.session.delete(user)
+    db.session.commit()

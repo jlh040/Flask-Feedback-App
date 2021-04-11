@@ -8,7 +8,9 @@ User Page
 <h1 class="display-5">{{ user.first_name }}'s Page</h1>
 {% if session['username'] == user.username %}
 <p class="lead"><a href="">Add Feedback</a></p>
-<button class="btn btn-outline-danger">Delete User</button>
+<form action="/users/{{ user.username }}/delete" method="POST">
+    <button class="btn btn-outline-danger">Delete User</button>
+</form>
 {% endif %}
 <hr>
 <div class="row">
