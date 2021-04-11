@@ -66,3 +66,10 @@ def login_user():
             return redirect('/login')
 
     return render_template('login.html', form=form)
+
+@app.route('/logout', methods=['GET'])
+def logout_user():
+    """Log a user out."""
+    session.pop('username')
+    flash('See you soon!')
+    return redirect('/')
