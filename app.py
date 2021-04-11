@@ -1,6 +1,6 @@
 from flask import Flask, session, render_template, flash, redirect
 from flask_debugtoolbar import DebugToolbarExtension
-from models import connect_db
+from models import User, connect_db
 
 app = Flask(__name__)
 
