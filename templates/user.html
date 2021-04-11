@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+User Page
+{% endblock %}
+
+{% block content %}
+<h1 class="display-5">User Page</h1>
+<hr>
+<div class="my-3 text-primary">
+    <div class="display-5 my-2">
+        Name: {{ user.first_name }}
+        {{ user.last_name }}
+    </div>
+    <div class="display-5 mb-2">
+        Username: {{ user.username }}
+    </div>
+    <div class="display-5 my-2">
+        Email: {{ user.email }}
+    </div>
+</div>
+{% endblock %}
