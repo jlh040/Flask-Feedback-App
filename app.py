@@ -35,6 +35,7 @@ def register_user():
         user = User.register(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
         db.session.add(user)
         db.session.commit()
+        session['username'] = username
         return redirect('/secret')
 
     return render_template('register.html', form=form)
@@ -42,7 +43,11 @@ def register_user():
 @app.route('/secret', methods=['GET'])
 def show_secret():
     """Show the secret page."""
-    return render_template('secret.html')
+    if session.get('username'):
+        return render_template('secret.html')
+    else:
+        flash('Please login first')
+        return redirect('/login')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_user():
@@ -54,6 +59,7 @@ def login_user():
         password = form.password.data
 
         if User.login(username, password):
+            session['username'] = username
             return redirect('/secret')
         else:
             flash('Incorrect Credentials')
