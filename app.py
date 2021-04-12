@@ -14,7 +14,7 @@ connect_db(app)
 app.config['SECRET_KEY'] = 'c8n1m9x3'
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
-# app.config['WTF_CSRF_ENABLED'] = False
+app.config['WTF_CSRF_ENABLED'] = False
 
 @app.route('/', methods=['GET'])
 def redirect_route():
@@ -88,7 +88,7 @@ def delete_user(username):
         return redirect('/')
     else:
         flash('Not authorized to delete this user!!')
-        return redirect('/')
+        return redirect(f'/users/{username}')
 
 @app.route('/users/<username>/feedback/add', methods=['GET', 'POST'])
 def add_feedback(username):
@@ -113,11 +113,23 @@ def add_feedback(username):
 
     return render_template('add_feedback.html', form=form, user=user)
 
-@app.route('/feedback/<int:feedback_id>/update')
+@app.route('/feedback/<int:feedback_id>/update', methods=['GET', 'POST'])
 def update_feedback(feedback_id):
     """Update a piece of feedback."""
     feedback = Feedback.query.get(feedback_id)
     form = FeedbackForm(obj=feedback)
+
+    if form.validate_on_submit():
+        if session.get('username') == feedback.user.username:
+            feedback.title = form.title.data
+            feedback.content = form.content.data
+            db.session.commit()
+            
+            flash('Feedback Updated!')
+            return redirect(f'/users/{feedback.user.username}')
+        else:
+            flash('Not authorized to update that feedback!!')
+            return redirect(f'/users/{feedback.user.username}')
     return render_template('update_feedback.html', form=form, feedback=feedback)
 
 def delete_feedback_and_user(user):
