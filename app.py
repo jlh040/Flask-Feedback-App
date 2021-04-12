@@ -137,11 +137,16 @@ def delete_feedback(feedback_id):
     """Delete a piece of feedback."""
     feedback = Feedback.query.get(feedback_id)
     username = feedback.username
-    db.session.delete(feedback)
-    db.session.commit()
+    
+    if session.get('username') == username:
+        db.session.delete(feedback)
+        db.session.commit()
 
-    flash('Feedback deleted!!!')
-    return redirect(f'/users/{username}')
+        flash('Feedback deleted!!!')
+        return redirect(f'/users/{username}')
+    else:
+        flash('Not authorized to delete that feedback!!')
+        return redirect(f'/users/{username}')
 
 def delete_feedback_and_user(user):
     """Delete all of a user's feedback and then delete the user."""
