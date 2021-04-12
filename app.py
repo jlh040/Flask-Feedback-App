@@ -1,6 +1,6 @@
 from flask import Flask, session, render_template, flash, redirect
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, User, connect_db
+from models import db, User, Feedback, connect_db
 from forms import RegisterForm, LoginForm, FeedbackForm
 
 app = Flask(__name__)
@@ -14,6 +14,7 @@ connect_db(app)
 app.config['SECRET_KEY'] = 'c8n1m9x3'
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
+# app.config['WTF_CSRF_ENABLED'] = False
 
 @app.route('/', methods=['GET'])
 def redirect_route():
@@ -35,6 +36,7 @@ def register_user():
         user = User.register(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
         db.session.add(user)
         db.session.commit()
+
         session['username'] = username
         return redirect(f'/users/{username}')
 
@@ -78,7 +80,7 @@ def logout_user():
 @app.route('/users/<username>/delete', methods=['POST'])
 def delete_user(username):
     """Delete a user."""
-    if session['username'] == username:
+    if session.get('username') == username:
         user = User.query.get(username)
         delete_feedback_and_user(user)
         session.clear()
@@ -88,11 +90,32 @@ def delete_user(username):
         flash('Not authorized to delete this user!!')
         return redirect('/')
 
-@app.route('/users/<username>/feedback/add', methods=['GET'])
+@app.route('/users/<username>/feedback/add', methods=['GET', 'POST'])
 def add_feedback(username):
+    """Add feedback for a user."""
     form = FeedbackForm()
     user = User.query.get(username)
+
+    if form.validate_on_submit():
+        if session.get('username') == username:
+            title = form.title.data
+            content = form.content.data
+
+            feedback = Feedback(title=title, content=content, username=username)
+            db.session.add(feedback)
+            db.session.commit()
+
+            flash('Feedback added!!')
+            return redirect(f'/users/{username}')
+        else:
+            flash('Not authorized to do this!')
+            return redirect(f'/users/{username}')
+
     return render_template('add_feedback.html', form=form, user=user)
+
+@app.route('/feedback/<int:feedback_id>/update')
+def update_feedback(feedback_id):
+    """Update a piece of feedback."""
 
 def delete_feedback_and_user(user):
     """Delete all of a user's feedback and then delete the user."""

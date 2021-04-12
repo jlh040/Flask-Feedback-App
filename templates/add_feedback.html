@@ -6,11 +6,15 @@ Feedback Form
 
 {% block content %}
 <h1 class="display-2">Add Feedback</h1>
-<form action="">
+<form action="/users/{{ user.username }}/feedback/add" method="POST">
     {{ form.hidden_tag() }}
 
-    {{ form.feedback.label(class_="form-label")}}
-    {{ form.feedback(class_="form-control") }}
+    <div class="my-3">
+        {% for field in form if field.widget.input_type != 'hidden' %}
+            {{ field.label(class_="form-label")}}
+            {{ field(class_="form-control") }}
+        {% endfor %}
+    </div>
     <button class="btn btn-outline-success my-3">Add feedback</button>
     <a href="/users/{{ user.username }}" class="btn btn-outline-info ms-2">Go back</a>
 </form>

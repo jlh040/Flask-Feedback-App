@@ -19,4 +19,5 @@ class LoginForm(FlaskForm):
 
 class FeedbackForm(FlaskForm):
     """Form to add feedback for a user."""
-    feedback = TextAreaField('Enter Your Feedback:', validators=[InputRequired()])
+    title = StringField('Enter The Title', validators=[InputRequired()])
+    content = TextAreaField('Enter Your Feedback:', validators=[InputRequired()])
