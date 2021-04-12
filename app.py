@@ -45,7 +45,7 @@ def register_user():
 @app.route('/users/<username>', methods=['GET'])
 def show_user_info(username):
     """Show the user's page."""
-    user = User.query.get(username)
+    user = User.query.get_or_404(username)
     if session.get('username'):
         return render_template('user.html', user=user)
     else:
@@ -124,13 +124,24 @@ def update_feedback(feedback_id):
             feedback.title = form.title.data
             feedback.content = form.content.data
             db.session.commit()
-            
+
             flash('Feedback Updated!')
             return redirect(f'/users/{feedback.user.username}')
         else:
             flash('Not authorized to update that feedback!!')
             return redirect(f'/users/{feedback.user.username}')
     return render_template('update_feedback.html', form=form, feedback=feedback)
+
+@app.route('/feedback/<int:feedback_id>/delete', methods=['POST'])
+def delete_feedback(feedback_id):
+    """Delete a piece of feedback."""
+    feedback = Feedback.query.get(feedback_id)
+    username = feedback.username
+    db.session.delete(feedback)
+    db.session.commit()
+
+    flash('Feedback deleted!!!')
+    return redirect(f'/users/{username}')
 
 def delete_feedback_and_user(user):
     """Delete all of a user's feedback and then delete the user."""

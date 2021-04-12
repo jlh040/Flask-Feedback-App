@@ -7,9 +7,9 @@ User Page
 {% block content %}
 <h1 class="display-5">{{ user.first_name }}'s Page</h1>
 {% if session['username'] == user.username %}
-<p class="lead"><a href="/users/{{ user.username }}/feedback/add">Add Feedback</a></p>
+<a href="/users/{{ user.username }}/feedback/add" class="btn btn-sm my-3 btn-outline-success">Add Feedback</a>
 <form action="/users/{{ user.username }}/delete" method="POST">
-    <button class="btn btn-outline-danger">Delete User</button>
+    <button class="btn btn-outline-danger btn-sm">Delete User</button>
 </form>
 {% endif %}
 <hr>
@@ -42,8 +42,10 @@ User Page
                     Content: {{ feedback.content }}
                 </p>
                 {% if session['username'] == user.username %}
-                <a href="/feedback/{{ feedback.id }}/update" class="card-link">Edit Feedback</a>
-                <a href="/delete" class="card-link text-danger">Delete Feedback</a>
+                <a href="/feedback/{{ feedback.id }}/update" class="btn btn-outline-info me-3">Edit Feedback</a>
+                <form action="/feedback/{{ feedback.id }}/delete" method="POST" style="display:inline;">
+                    <button class="btn btn-outline-danger">Delete Feedback</button>
+                </form>
                 {% endif %}
             </div>
         </div>
