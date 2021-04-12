@@ -1,0 +1,10 @@
+- This is a simple app that implements both authentication and authorization by allowing a user to login, register, create 'feedback', edit 'feedback', delete 'feedback', and view 'feedback'. A user must be logged in, in order to create, edit, or delete their own feedback. They can see the 'feedback' of other users but they will not be authorized to create, edit, or delete other user's feedback.
+- Tools used:
+  - Python
+  - Flask
+  - Flask-SQLAlchemy
+  - Flask-WTForms
+  - Flask-Bcrypt
+  - PostgreSQL
+  - Bootstrap 5
+  - HTML
