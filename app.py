@@ -116,6 +116,9 @@ def add_feedback(username):
 @app.route('/feedback/<int:feedback_id>/update')
 def update_feedback(feedback_id):
     """Update a piece of feedback."""
+    feedback = Feedback.query.get(feedback_id)
+    form = FeedbackForm(obj=feedback)
+    return render_template('update_feedback.html', form=form, feedback=feedback)
 
 def delete_feedback_and_user(user):
     """Delete all of a user's feedback and then delete the user."""

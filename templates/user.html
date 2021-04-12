@@ -42,7 +42,7 @@ User Page
                     Content: {{ feedback.content }}
                 </p>
                 {% if session['username'] == user.username %}
-                <a href="/edit" class="card-link">Edit Feedback</a>
+                <a href="/feedback/{{ feedback.id }}/update" class="card-link">Edit Feedback</a>
                 <a href="/delete" class="card-link text-danger">Delete Feedback</a>
                 {% endif %}
             </div>
